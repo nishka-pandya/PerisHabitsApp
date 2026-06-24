@@ -10,14 +10,24 @@ import SwiftUI
 struct ContentView: View {
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
+            Text("Today's Dashboard")
+                .font(.title)
+            Text("Use Spinach today before using newer vegetables!")
+                .padding(20)
+                .frame(minWidth:120, maxWidth: .infinity, alignment:.center)
+                .background(.green)
+                .cornerRadius(20)
                 
-            Text("Hello, world!")
-            Text("Welcome!")
+            Text("Remember to store newly bought food in refrigerator if not consumed within 24 hours")
+                .padding(20)
+                .frame(minWidth:120, maxWidth: .infinity, alignment: .center)
+                .background(.green)
+                .cornerRadius(20)
+            
+            Spacer()
+                
         }
-        .padding()
+        
     }
 }
 
