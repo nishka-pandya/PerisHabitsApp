@@ -17,13 +17,29 @@ struct ContentView: View {
                 .frame(minWidth:120, maxWidth: .infinity, alignment:.center)
                 .background(.green)
                 .cornerRadius(20)
+            Button("Mark as Done"){
+                
+            }
                 
             Text("Remember to store newly bought food in refrigerator if not consumed within 24 hours")
                 .padding(20)
                 .frame(minWidth:120, maxWidth: .infinity, alignment: .center)
                 .background(.green)
                 .cornerRadius(20)
+            Button("Mark as Done"){
+                
+            }
+            Text("Remember to check your fridge before shopping! Usual bought items are: [...] and right now you have [...]")
+                .padding(20)
+                .frame(minWidth:120,maxWidth:.infinity, alignment: .center)
+                .background(.green)
+                .cornerRadius(20)
+            Button("Mark as Done"){
+                
+            }
             
+            Text("Navigation")
+                .font(.title)
             Spacer()
                 
         }
