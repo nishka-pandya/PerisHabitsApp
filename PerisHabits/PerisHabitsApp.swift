@@ -6,12 +6,14 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct PerisHabitsApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            Pantry()
         }
+        .modelContainer(for: FoodItemInfo.self)
     }
 }

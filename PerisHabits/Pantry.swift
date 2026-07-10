@@ -6,12 +6,12 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct Pantry: View {
     
-    @State private var foods: [FoodItemInfo] = [
-        FoodItemInfo(name:"Milk", expirationDate: .now, quantity: 2, location: "Refrigerator")
-    ]
+    @Query private var foods: [FoodItemInfo]
+    @Environment(\.modelContext) private var context
     @State private var newFoodItem = ""
     @State private var newExpirationDate = Date.now
     @State private var newQuantity: Int = 1
@@ -21,9 +21,6 @@ struct Pantry: View {
             .font(.title)
             .padding(10)
         HStack{
-            Button("Add"){
-                
-            }
             Button("Undo"){
                 
             }
@@ -31,40 +28,48 @@ struct Pantry: View {
                 Button("Category"){
                     
                 }
-                Button("Date"){
+                Button("Use Soon"){
                     
                     
                 }
             }
         }
         NavigationStack{
-                List(foods, id: \.name){ food in
-                    VStack{
-                        Text(food.name)
+                List{
+                    ForEach(foods) { food in
+                        VStack{
+                            Text(food.name)
+                        }
                     }
+                    .onDelete(perform: deleteItem)
                 }
-            .navigationTitle("Pantry")
             .safeAreaInset(edge: .bottom){
                 VStack(alignment: .center, spacing: 20){
-                    Text("Expiration Date")
+                    Text("New Item")
                         .font(.headline)
-                    DatePicker(selection: $newExpirationDate){
-                        TextField("Name", text: $newFoodItem)
+                        VStack{
+                            TextField("Name", text: $newFoodItem)
                             .textFieldStyle(.roundedBorder)
-                        TextField("Location", text: $newLocation)
+                            TextField("Type", text: $newLocation)
                             .textFieldStyle(.roundedBorder)
-                    Picker("Quantity", selection: $newQuantity){
-                            ForEach(1...100, id: \.self){ quant in
-                                Text("\(quant)")
+                            Text("Date Bought")
+                            DatePicker(selection: $newExpirationDate, in: Date.distantPast...Date.now, displayedComponents: .date){}
+                                .frame(maxWidth: .infinity, alignment:.center)
+                            Text("Quantity")
+                            Picker("Quantity", selection: $newQuantity){
+                                ForEach(1...100, id: \.self){ quant in
+                                    Text("\(quant)")
+                                }
                             }
-                    }
-                    .pickerStyle(.wheel)
-                    .frame(height:150)
+                            .pickerStyle(.wheel)
+                            .frame(height:70)
+                        }
+                
                         
-                    }
+                    
                     Button("Save"){
                         let newFood = FoodItemInfo(name: newFoodItem, expirationDate: newExpirationDate, quantity: newQuantity, location: newLocation)
-                        foods.append(newFood)
+                        context.insert(newFood)
                         newFoodItem = ""
                         newExpirationDate = .now
                         newQuantity = 1
@@ -77,12 +82,19 @@ struct Pantry: View {
             }
         }
         
-        
+    }
+    
+    func deleteItem(at offsets: IndexSet){
+        for index in offsets {
+            let itemToDelete = foods[index]
+            context.delete(itemToDelete)
+        }
     }
 }
                 
 
     #Preview {
         Pantry()
+            .modelContainer(for: FoodItemInfo.self, inMemory: true)
     }
 
