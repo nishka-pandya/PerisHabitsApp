@@ -15,33 +15,59 @@ struct Pantry: View {
     @State private var newFoodItem = ""
     @State private var newExpirationDate = Date.now
     @State private var newQuantity: Int = 1
-    @State private var newLocation = ""
+    @State private var newType = ""
+    @State private var selectedFood: FoodItemInfo?
+    
+    private var foodTypes: Dictionary = ["Leftovers": "Highest", "Dairy":"Medium-High", "Fresh Produce": "Medium", "Meats": "High", "Seafood": "High", "Condiments": "Lower", "Fruit": "Lower"]
+    
     var body: some View {
-        Text("Pantry")
-            .font(.title)
-            .padding(10)
-        HStack{
-            Button("Undo"){
+        //Text("Pantry")
+            //.font(.title)
+            //.padding(10)
+        //HStack{
+            //Button("Undo"){
                 
-            }
-            Menu("Sort By"){
-                Button("Category"){
+            //}
+            //Menu("Sort By"){
+                //Button("Category"){
                     
-                }
-                Button("Use Soon"){
+                //}
+                //Button("Use Soon"){
                     
                     
-                }
-            }
-        }
+                //}
+            //}
         NavigationStack{
+            HStack{
+                Menu("Sort By"){
+                    Button("Category"){
+                        
+                    }
+                    Button("Use Soon"){
+                        
+                    }
+                }
+            }
                 List{
                     ForEach(foods) { food in
-                        VStack{
+                        HStack{
                             Text(food.name)
+                            Spacer()
+                            Text(food.expirationDate, format:.dateTime.month(.wide).day().year())
+                        }
+                        .onTapGesture {
+                            selectedFood = food
                         }
                     }
                     .onDelete(perform: deleteItem)
+                }
+                .navigationTitle("Pantry")
+                .navigationBarTitleDisplayMode(.inline)
+                .sheet(item: $selectedFood){ food in
+                    NavigationStack {
+                        EditFoodView(food: food)
+                    }
+                    
                 }
             .safeAreaInset(edge: .bottom){
                 VStack(alignment: .center, spacing: 20){
@@ -50,30 +76,45 @@ struct Pantry: View {
                         VStack{
                             TextField("Name", text: $newFoodItem)
                             .textFieldStyle(.roundedBorder)
-                            TextField("Type", text: $newLocation)
-                            .textFieldStyle(.roundedBorder)
-                            Text("Date Bought")
-                            DatePicker(selection: $newExpirationDate, in: Date.distantPast...Date.now, displayedComponents: .date){}
-                                .frame(maxWidth: .infinity, alignment:.center)
-                            Text("Quantity")
-                            Picker("Quantity", selection: $newQuantity){
-                                ForEach(1...100, id: \.self){ quant in
-                                    Text("\(quant)")
+                            //TextField("Type of Food", text: $newLocation)
+                            //.textFieldStyle(.roundedBorder)
+                            HStack{
+                                Text("Food Type")
+                                Picker("Type of Food", selection: $newType){
+                                    ForEach(foodTypes.keys.sorted(), id: \.self){ type in
+                                        Text("\(type)")
+                                        
+                                    }
                                 }
+                                .pickerStyle(.wheel)
+                                .frame(height: 70)
                             }
-                            .pickerStyle(.wheel)
-                            .frame(height:70)
+                            HStack{
+                                Text("Date Bought/Expiration")
+                                DatePicker(selection: $newExpirationDate, in: Date.distantPast...Date.now, displayedComponents: .date){}
+                                    .frame(maxWidth: .infinity, alignment:.center)
+                            }
+                            HStack{
+                                Text("Quantity")
+                                Picker("Quantity", selection: $newQuantity){
+                                    ForEach(1...100, id: \.self){ quant in
+                                        Text("\(quant)")
+                                    }
+                                }
+                                .pickerStyle(.wheel)
+                                .frame(height:70)
+                            }
                         }
                 
                         
                     
                     Button("Save"){
-                        let newFood = FoodItemInfo(name: newFoodItem, expirationDate: newExpirationDate, quantity: newQuantity, location: newLocation)
+                        let newFood = FoodItemInfo(name: newFoodItem, expirationDate: newExpirationDate, quantity: newQuantity, type: newType)
                         context.insert(newFood)
                         newFoodItem = ""
                         newExpirationDate = .now
                         newQuantity = 1
-                        newLocation = ""
+                        newType = ""
                     }
                     .bold()
                 }

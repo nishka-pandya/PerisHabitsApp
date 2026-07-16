@@ -12,8 +12,9 @@ import SwiftData
 struct PerisHabitsApp: App {
     var body: some Scene {
         WindowGroup {
-            Pantry()
+            ContentView()
+                .modelContainer(for: FoodItemInfo.self)
         }
-        .modelContainer(for: FoodItemInfo.self)
+        //.modelContainer(for: FoodItemInfo.self)
     }
 }

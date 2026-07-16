@@ -14,13 +14,17 @@ class FoodItemInfo{
     var name: String
     var expirationDate: Date
     var quantity: Int
-    var location: String
+    var type: String
+    //var typePriority: Int
     
-    init(name: String, expirationDate: Date, quantity: Int, location: String){
+    init(name: String, expirationDate: Date, quantity: Int, type: String, ){
         self.name = name
         self.expirationDate = expirationDate
         self.quantity = quantity
-        self.location = location
+        self.type = type
+        //if (self.type.values == "Highest"){
+            
+        //}
     }
     
     
