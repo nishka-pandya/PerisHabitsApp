@@ -11,100 +11,253 @@ import SwiftData
 struct ContentView: View {
     
     @Query private var foodDashboard: [FoodItemInfo]
+    private var foodTypes: Dictionary = ["Leftovers": "Highest", "Dairy":"Medium-High", "Fresh Produce": "Medium", "Meats": "High", "Seafood": "High", "Condiments": "Lower", "Fruit": "Lower"]
     
     func findTop(originalFoodArray: [FoodItemInfo]) -> [FoodItemInfo]{
         var topFoodItems = [FoodItemInfo]()
-        //for foodItems in originalFoodArray{
-            //topFoodItems.append(foodItems)
-        //}
-        var sortedByDate = originalFoodArray.sorted(by: {$0.expirationDate < $1.expirationDate})
+        
+        let sortedByDate = originalFoodArray.sorted(by: {$0.useByDate < $1.useByDate})
         
         var index = 0;
         while (topFoodItems.count < 3 && index < sortedByDate.count){
-                topFoodItems.append(sortedByDate[index])
-                //sortedByDate.remove(at: index)
-                index+=1
-                
-                
+            topFoodItems.append(sortedByDate[index])
+            //sortedByDate.remove(at: index)
+            index+=1
+            
+            
         }
         
         return topFoodItems
         
     }
     var body: some View {
-        //VStack {
-        //Text("Today's Dashboard")
-        //.font(.title)
-        //Text("Use Spinach today before using newer vegetables!")
-        // .padding(20)
-        //.frame(minWidth:120, maxWidth: .infinity, alignment:.center)
-        //.background(.green)
-        //.cornerRadius(20)
-        //Button("Mark as Done"){
+        /*ZStack{
+         Color.green.opacity(0.2)
+         .ignoresSafeArea()
+         VStack {
+         Text("Today's Dashboard")
+         .font(.title)
+         .fontWeight(.bold)
+         .fontDesign(.serif)
+         .padding(20)
+         .frame(minWidth:120, maxWidth:.infinity, alignment:.center)
+         .foregroundStyle(.green)
+         .brightness(-0.4)
+         .background(.green.opacity(0.7))
+         //.background(Color.green.brightness(-0.3))
+         
+         Text("Use Soon")
+         .font(.title)
+         .fontWeight(.bold)
+         .fontDesign(.serif)
+         .padding(10)
+         .foregroundStyle(.green)
+         .brightness(-0.4)
+         
+         VStack(alignment:.leading, spacing: 20.0){
+         HStack(spacing: 100.0){
+         Text("Milk")
+         .fontDesign(.serif)
+         .frame(minWidth:120, maxWidth: .infinity, alignment:.leading)
+         .font(.title3)
+         Text("In 3 days")
+         }
+         .fontDesign(.serif)
+         .font(.title3)
+         Button("Mark as Used"){
+         
+         }
+         .buttonStyle(.borderedProminent)
+         .fontDesign(.serif)
+         .foregroundColor(.white)
+         .padding(5)
+         
+         }
+         .padding()
+         .background(Rectangle()
+         .foregroundColor(.white))
+         .cornerRadius(20)
+         .shadow(radius:15)
+         .padding()
+         
+         VStack (alignment: .leading, spacing: 20.0){
+         HStack(spacing: 100.0){
+         Text("Chicken Leftovers")
+         .fontDesign(.serif)
+         .frame(minWidth:120, maxWidth: .infinity, alignment: .leading)
+         .font(.title3)
+         Text("In 5 days")
+         }
+         .font(.title3)
+         .fontDesign(.serif)
+         Button("Mark as Used"){
+         
+         }
+         .fontDesign(.serif)
+         .buttonStyle(.borderedProminent)
+         .padding(5)
+         
+         }
+         .padding()
+         .background(Rectangle() .foregroundColor(.white))
+         .cornerRadius(20)
+         .shadow(radius:15)
+         .padding()
+         
+         
+         VStack(alignment: .leading, spacing: 20.0){
+         HStack(spacing: 100.0){
+         Text("Rice Leftovers")
+         .fontDesign(.serif)
+         .frame(minWidth:120,maxWidth:.infinity, alignment: .leading)
+         .font(.title3)
+         Text("In 8 days")
+         }
+         .font(.title3)
+         .fontDesign(.serif)
+         Button("Mark as Done"){
+         
+         
+         }
+         .fontDesign(.serif)
+         .buttonStyle(.borderedProminent)
+         .padding(5)
+         }
+         .padding()
+         .background(Rectangle() .foregroundColor(.white))
+         .cornerRadius(20)
+         .shadow(radius:15)
+         .padding()
+         Spacer()*/
         
-        //}
-        
-        //Text("Remember to store newly bought food in refrigerator if not consumed within 24 hours")
-        // .padding(20)
-        // .frame(minWidth:120, maxWidth: .infinity, alignment: .center)
-        // .background(.green)
-        // .cornerRadius(20)
-        //Button("Mark as Done"){
-        
-        //}
-        //Text("Remember to check your fridge before shopping! Usual bought items are: [...] and right now you have [...]")
-        //    .padding(20)
-        //    .frame(minWidth:120,maxWidth:.infinity, alignment: .center)
-        //    .background(.green)
-        //    .cornerRadius(20)
-        // Button("Mark as Done"){
-        
-        
-        //  }
         NavigationStack{
-            VStack{
-                Text("Dashboard")
-                    .font(.title)
-                Text("Use Soon")
-                
-                
-                
-                ForEach(findTop(originalFoodArray: foodDashboard)){ food in
-                    Text(food.name)
-                        .font(.title2)
+            ZStack{
+                Color.green.opacity(0.3)
+                    .ignoresSafeArea()
+                VStack{
+                    Text("Today's Dashboard")
+                    /*.fontWeight(.bold)
+                     .fontDesign(.serif)
+                     .font(.title)
+                     .background(.purple.opacity(0.6))
+                     .cornerRadius(20)
+                     .padding(10)*/
+                        .font(.title)
+                        .fontWeight(.bold)
+                        .fontDesign(.serif)
                         .padding(20)
-                        .frame(minWidth:120, maxWidth: .infinity, alignment: .center)
-                        .background(.green)
+                        .frame(minWidth:120, maxWidth:.infinity, alignment:.center)
+                        .foregroundStyle(.green)
+                        .brightness(-0.4)
+                        .background(.green.opacity(0.7))
+                    
+                    Text("Use Soon")
+                    //.font(.title2)
+                        .font(.title)
+                        .fontWeight(.bold)
+                        .fontDesign(.serif)
+                        .padding(10)
+                        .foregroundStyle(.green)
+                                                .brightness(-0.4)
+                    
+                    if(findTop(originalFoodArray: foodDashboard).count <= 0){
+                        //Text("hi")
+                        VStack(alignment:.leading, spacing: 20.0){
+                            Text("Add New Groceries in Refrigerator!")
+                                .fontDesign(.serif)
+                                .frame(minWidth:120, maxWidth: .infinity, alignment:.center)
+                                .font(.title3)
+                        }
+                        .padding()
+                        .background(Rectangle().foregroundColor(.white))
                         .cornerRadius(20)
-                    Button("Done"){
-                        
+                        .shadow(radius: 15)
+                        .padding()
                     }
-                    .font(.title3)
-                    .buttonStyle(.borderedProminent)
-                    .tint(.purple)
+                    else{
+                        ForEach(findTop(originalFoodArray: foodDashboard)){ food in
+                            VStack(alignment:.leading, spacing: 20.0){
+                                HStack(spacing: 100.0){
+                                    Text(food.name)
+                                        .fontDesign(.serif)
+                                        .frame(minWidth:120, maxWidth: .infinity, alignment:.leading)
+                                        .font(.title3)
+                                    Text("In 3 days")
+                                }
+                                .fontDesign(.serif)
+                                .font(.title3)
+                                Button("Mark as Used"){
+                                    
+                                }
+                                .buttonStyle(.borderedProminent)
+                                .fontDesign(.serif)
+                                .foregroundColor(.white)
+                                .padding(5)
+                                
+                            }
+                            .padding()
+                            .background(Rectangle()
+                                .foregroundColor(.white))
+                            .cornerRadius(20)
+                            .shadow(radius:15)
+                            .padding()
+                            
+                            /*Text(food.name)
+                             .font(.title2)
+                             .padding(20)
+                             .frame(minWidth:0, maxWidth: 400, alignment: .center)
+                             .background(.white)
+                             .cornerRadius(20)
+                             Button("Done"){
+                             
+                             }
+                             .font(.title3)
+                             .buttonStyle(.borderedProminent)
+                             .tint(.purple)
+                             }*/
+                        }
+                }
+                    Spacer()
                 }
             }
             
+            
+            
             .toolbar{
-                ToolbarItemGroup(placement: .status){
+                ToolbarItemGroup(placement: .bottomBar){
                     NavigationLink(destination: Pantry()){
                         Text("Refrigerator")
+                            .padding()
+                            .fontDesign(.serif)
+                            .fontWeight(.bold)
+                            .font(.title2)
+                            .foregroundStyle(.green)
+                            .brightness(-0.4)
+                            .background(.green.opacity(0.7))
+                            .cornerRadius(30)
                     }
                 }
             }
+            .toolbarBackground(Color.green, for:.bottomBar)
+            .toolbarBackground(.visible, for: .bottomBar)
+            
             Spacer()
         }
-        
+        .toolbarBackground(Color.green, for:.bottomBar)
+        .toolbarBackground(.visible, for: .bottomBar)
         .navigationTitle("Dashboard")
         .navigationBarTitleDisplayMode(.inline)
         //.navigationBarHidden(true)
         
     }
+            
+}
     
-}
 
+    
+    
+    #Preview {
+        ContentView()
+            .modelContainer(for: FoodItemInfo.self, inMemory: true)
+    }
 
-#Preview {
-    ContentView()
-        .modelContainer(for: FoodItemInfo.self, inMemory: true)
-}

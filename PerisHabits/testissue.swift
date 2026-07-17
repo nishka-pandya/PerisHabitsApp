@@ -9,7 +9,16 @@ import SwiftUI
 
 struct testissue: View {
     var body: some View {
-        Text("Hi!")
+        NavigationStack {
+            Text("Test")
+                .toolbar {
+                    ToolbarItem(placement: .bottomBar) {
+                        Button("Test") {}
+                    }
+                }
+        }
+        .toolbarBackground(.red, for: .bottomBar)
+        .toolbarBackground(.visible, for: .bottomBar)
     }
 }
 

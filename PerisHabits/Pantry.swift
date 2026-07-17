@@ -13,7 +13,7 @@ struct Pantry: View {
     @Query private var foods: [FoodItemInfo]
     @Environment(\.modelContext) private var context
     @State private var newFoodItem = ""
-    @State private var newExpirationDate = Date.now
+    @State private var newUseByDate = Date.now
     @State private var newQuantity: Int = 1
     @State private var newType = ""
     @State private var selectedFood: FoodItemInfo?
@@ -53,7 +53,7 @@ struct Pantry: View {
                         HStack{
                             Text(food.name)
                             Spacer()
-                            Text(food.expirationDate, format:.dateTime.month(.wide).day().year())
+                            Text(food.useByDate, format:.dateTime.month(.wide).day().year())
                         }
                         .onTapGesture {
                             selectedFood = food
@@ -90,8 +90,8 @@ struct Pantry: View {
                                 .frame(height: 70)
                             }
                             HStack{
-                                Text("Date Bought/Expiration")
-                                DatePicker(selection: $newExpirationDate, in: Date.distantPast...Date.now, displayedComponents: .date){}
+                                Text("Use By Date")
+                                DatePicker(selection: $newUseByDate, in: Date.distantPast...Date.distantFuture, displayedComponents: .date){}
                                     .frame(maxWidth: .infinity, alignment:.center)
                             }
                             HStack{
@@ -109,10 +109,10 @@ struct Pantry: View {
                         
                     
                     Button("Save"){
-                        let newFood = FoodItemInfo(name: newFoodItem, expirationDate: newExpirationDate, quantity: newQuantity, type: newType)
+                        let newFood = FoodItemInfo(name: newFoodItem, useByDate: newUseByDate, quantity: newQuantity, type: newType)
                         context.insert(newFood)
                         newFoodItem = ""
-                        newExpirationDate = .now
+                        newUseByDate = .now
                         newQuantity = 1
                         newType = ""
                     }

@@ -10,7 +10,7 @@ import SwiftUI
 struct EditFoodView: View {
     var food: FoodItemInfo
     @State private var newFoodName: String
-    @State private var newExpirationDate: Date
+    @State private var newUseByDate: Date
     @State private var newType: String
     @State private var newQuantity: Int
     @Environment(\.dismiss) private var dismiss
@@ -18,7 +18,7 @@ struct EditFoodView: View {
     init(food: FoodItemInfo){
         self.food = food
         _newFoodName = State(initialValue: food.name)
-        _newExpirationDate = State(initialValue: food.expirationDate)
+        _newUseByDate = State(initialValue: food.useByDate)
         _newType = State(initialValue: food.type)
         _newQuantity = State(initialValue: food.quantity)
     }
@@ -27,7 +27,7 @@ struct EditFoodView: View {
         Form {
             TextField("Name", text: $newFoodName)
             TextField("Location", text: $newType)
-            DatePicker("Day Bought", selection: $newExpirationDate, in: Date.distantPast...Date.now, displayedComponents: .date)
+            DatePicker("Day Bought", selection: $newUseByDate, in: Date.distantPast...Date.now, displayedComponents: .date)
             Picker("Quantity", selection: $newQuantity){
                 ForEach(1...100, id: \.self){ quant in
                     Text("\(quant)")
@@ -48,7 +48,7 @@ struct EditFoodView: View {
                 Button("Save"){
                     food.name = newFoodName
                     food.type = newType
-                    food.expirationDate = newExpirationDate
+                    food.useByDate = newUseByDate
                     food.quantity = newQuantity
                     dismiss()
                     
@@ -60,6 +60,6 @@ struct EditFoodView: View {
 
 #Preview {
     NavigationStack{
-        EditFoodView(food: FoodItemInfo(name: "Test", expirationDate: Date.now, quantity: 1, type: "Test"))
+        EditFoodView(food: FoodItemInfo(name: "Test", useByDate: Date.now, quantity: 1, type: "Test"))
     }
 }
