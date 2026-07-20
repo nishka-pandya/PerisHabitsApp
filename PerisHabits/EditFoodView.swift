@@ -23,26 +23,57 @@ struct EditFoodView: View {
         _newQuantity = State(initialValue: food.quantity)
     }
     
+    private var foodTypes: Dictionary = ["Leftovers": "Highest", "Dairy":"Medium-High", "Fresh Produce": "Medium", "Meats": "High", "Seafood": "High", "Condiments": "Lower", "Fruit": "Lower"]
+    
     var body: some View {
-        Form {
-            TextField("Name", text: $newFoodName)
-            TextField("Location", text: $newType)
-            DatePicker("Day Bought", selection: $newUseByDate, in: Date.distantPast...Date.now, displayedComponents: .date)
-            Picker("Quantity", selection: $newQuantity){
-                ForEach(1...100, id: \.self){ quant in
-                    Text("\(quant)")
+        ZStack{
+            Color.green.opacity(0.15)
+                .ignoresSafeArea()
+            VStack{
+                Text("Edit Food")
+                    .font(.title)
+                    .fontDesign(.serif)
+                    .fontWeight(.bold)
+                    .foregroundStyle(.green)
+                    .brightness(-0.4)
+                    .padding()
+                    . frame(minWidth:120, maxWidth:.infinity, alignment:.center)
+                    .background(.green.opacity(0.45))
+                Form {
+                    TextField("Name", text: $newFoodName)
+                        .fontDesign(.serif)
+                    //TextField("Type", text: $newType)
+                    Picker("Food Type", selection: $newType){
+                        ForEach(foodTypes.keys.sorted(), id: \.self){ type in
+                            Text("\(type)")
+                                .fontDesign(.serif)
+                            
+                        }
+                    }
+                    .fontDesign(.serif)
+                    DatePicker("Use By Date", selection: $newUseByDate, in: Date.distantPast...Date.distantFuture, displayedComponents: .date)
+                        .fontDesign(.serif)
+                    Picker("Quantity", selection: $newQuantity){
+                        ForEach(1...100, id: \.self){ quant in
+                            Text("\(quant)")
+                        }
+                    }
+                    .fontDesign(.serif)
+                    
                 }
+                .scrollContentBackground(.hidden)
+                .shadow(radius:15)
             }
-            
         }
-        .navigationTitle("Edit Food")
-        .navigationBarTitleDisplayMode(.inline)
+        //.navigationTitle("Edit Food")
+        //.navigationBarTitleDisplayMode(.inline)
         .toolbar{
             ToolbarItem(placement: .cancellationAction){
                 Button("Cancel"){
                     dismiss()
             
                 }
+                .fontDesign(.serif)
             }
             ToolbarItem(placement: .confirmationAction){
                 Button("Save"){
@@ -53,6 +84,8 @@ struct EditFoodView: View {
                     dismiss()
                     
                 }
+                .fontDesign(.serif)
+                
             }
         }
     }
@@ -60,6 +93,6 @@ struct EditFoodView: View {
 
 #Preview {
     NavigationStack{
-        EditFoodView(food: FoodItemInfo(name: "Test", useByDate: Date.now, quantity: 1, type: "Test"))
+        EditFoodView(food: FoodItemInfo(name: "Test", useByDate: Date.now, quantity: 1, type: "Leftovers"))
     }
 }

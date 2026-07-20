@@ -13,6 +13,7 @@ class FoodItemInfo{
     
     var name: String
     var useByDate: Date
+    //var daysRemaining: Int
     var quantity: Int
     var type: String
     
@@ -21,10 +22,27 @@ class FoodItemInfo{
         self.useByDate = useByDate
         self.quantity = quantity
         self.type = type
-        //if (self.type.values == "Highest"){
-            
-        //}
+        //let calendar = Calendar.current
+        //let startMidnight = calendar.startOfDay(for: Date.now)  // Used ChatGPT to learn how to convert from date to dateComponents
+        //let endMidnight = calendar.startOfDay(for: useByDate)
+        //let components = calendar.dateComponents([.day], from: startMidnight, to: endMidnight).day
+        //self.daysRemaining = components!
+
     }
+    
+    /*func getDaysRemaining() -> Int{
+        
+        let calendar = Calendar.current
+        let startMidnight = calendar.startOfDay(for: Date.now)
+        let endMidnight = calendar.startOfDay(for: useByDate)
+        let components = calendar.dateComponents([.day],  from: startMidnight, to: endMidnight).day
+        
+        daysRemaining = components!
+        
+        return daysRemaining
+        
+        
+    }*/
     
     
     

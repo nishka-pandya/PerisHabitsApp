@@ -85,7 +85,7 @@
 					};
 				};
 			};
-			buildConfigurationList = BDAE8A612FE9EF23005BE271 /* Build configuration list for PBXProject "PerisHabits" */;
+			buildConfigurationList = BDAE8A612FE9EF23005BE271 /* Build configuration list for PBXProject "PerishABit" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -309,7 +309,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		BDAE8A612FE9EF23005BE271 /* Build configuration list for PBXProject "PerisHabits" */ = {
+		BDAE8A612FE9EF23005BE271 /* Build configuration list for PBXProject "PerishABit" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				BDAE8A6F2FE9EF25005BE271 /* Debug */,

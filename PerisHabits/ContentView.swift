@@ -11,6 +11,7 @@ import SwiftData
 struct ContentView: View {
     
     @Query private var foodDashboard: [FoodItemInfo]
+    @Environment(\.modelContext) private var context
     private var foodTypes: Dictionary = ["Leftovers": "Highest", "Dairy":"Medium-High", "Fresh Produce": "Medium", "Meats": "High", "Seafood": "High", "Condiments": "Lower", "Fruit": "Lower"]
     
     func findTop(originalFoodArray: [FoodItemInfo]) -> [FoodItemInfo]{
@@ -31,117 +32,13 @@ struct ContentView: View {
         
     }
     var body: some View {
-        /*ZStack{
-         Color.green.opacity(0.2)
-         .ignoresSafeArea()
-         VStack {
-         Text("Today's Dashboard")
-         .font(.title)
-         .fontWeight(.bold)
-         .fontDesign(.serif)
-         .padding(20)
-         .frame(minWidth:120, maxWidth:.infinity, alignment:.center)
-         .foregroundStyle(.green)
-         .brightness(-0.4)
-         .background(.green.opacity(0.7))
-         //.background(Color.green.brightness(-0.3))
-         
-         Text("Use Soon")
-         .font(.title)
-         .fontWeight(.bold)
-         .fontDesign(.serif)
-         .padding(10)
-         .foregroundStyle(.green)
-         .brightness(-0.4)
-         
-         VStack(alignment:.leading, spacing: 20.0){
-         HStack(spacing: 100.0){
-         Text("Milk")
-         .fontDesign(.serif)
-         .frame(minWidth:120, maxWidth: .infinity, alignment:.leading)
-         .font(.title3)
-         Text("In 3 days")
-         }
-         .fontDesign(.serif)
-         .font(.title3)
-         Button("Mark as Used"){
-         
-         }
-         .buttonStyle(.borderedProminent)
-         .fontDesign(.serif)
-         .foregroundColor(.white)
-         .padding(5)
-         
-         }
-         .padding()
-         .background(Rectangle()
-         .foregroundColor(.white))
-         .cornerRadius(20)
-         .shadow(radius:15)
-         .padding()
-         
-         VStack (alignment: .leading, spacing: 20.0){
-         HStack(spacing: 100.0){
-         Text("Chicken Leftovers")
-         .fontDesign(.serif)
-         .frame(minWidth:120, maxWidth: .infinity, alignment: .leading)
-         .font(.title3)
-         Text("In 5 days")
-         }
-         .font(.title3)
-         .fontDesign(.serif)
-         Button("Mark as Used"){
-         
-         }
-         .fontDesign(.serif)
-         .buttonStyle(.borderedProminent)
-         .padding(5)
-         
-         }
-         .padding()
-         .background(Rectangle() .foregroundColor(.white))
-         .cornerRadius(20)
-         .shadow(radius:15)
-         .padding()
-         
-         
-         VStack(alignment: .leading, spacing: 20.0){
-         HStack(spacing: 100.0){
-         Text("Rice Leftovers")
-         .fontDesign(.serif)
-         .frame(minWidth:120,maxWidth:.infinity, alignment: .leading)
-         .font(.title3)
-         Text("In 8 days")
-         }
-         .font(.title3)
-         .fontDesign(.serif)
-         Button("Mark as Done"){
-         
-         
-         }
-         .fontDesign(.serif)
-         .buttonStyle(.borderedProminent)
-         .padding(5)
-         }
-         .padding()
-         .background(Rectangle() .foregroundColor(.white))
-         .cornerRadius(20)
-         .shadow(radius:15)
-         .padding()
-         Spacer()*/
-        
+    
         NavigationStack{
             ZStack{
-                Color.green.opacity(0.3)
+                Color.green.opacity(0.15)
                     .ignoresSafeArea()
                 VStack{
                     Text("Today's Dashboard")
-                    /*.fontWeight(.bold)
-                     .fontDesign(.serif)
-                     .font(.title)
-                     .background(.purple.opacity(0.6))
-                     .cornerRadius(20)
-                     .padding(10)*/
                         .font(.title)
                         .fontWeight(.bold)
                         .fontDesign(.serif)
@@ -149,7 +46,7 @@ struct ContentView: View {
                         .frame(minWidth:120, maxWidth:.infinity, alignment:.center)
                         .foregroundStyle(.green)
                         .brightness(-0.4)
-                        .background(.green.opacity(0.7))
+                        .background(.green.opacity(0.45))
                     
                     Text("Use Soon")
                     //.font(.title2)
@@ -182,17 +79,39 @@ struct ContentView: View {
                                         .fontDesign(.serif)
                                         .frame(minWidth:120, maxWidth: .infinity, alignment:.leading)
                                         .font(.title3)
-                                    Text("In 3 days")
+                                    let calendar = Calendar.current
+                                    let startMidnight = calendar.startOfDay(for: Date.now)  // Used ChatGPT to learn how to convert from date to dateComponents
+                                    let endMidnight = calendar.startOfDay(for: food.useByDate)
+                                    let daysRemaining = calendar.dateComponents([.day], from: startMidnight, to: endMidnight).day!
+                                    if (daysRemaining <= 1){
+                                        Text("In \(daysRemaining) day")
+                                            .foregroundStyle(Color.red)
+                                            .fontWeight(.bold)
+                                    }
+                                    else if (daysRemaining <= 3){
+                                        Text("In \(daysRemaining) days")
+                                            .foregroundStyle(Color.orange)
+                                            .fontWeight(.bold)
+                                    }
+                                    else{
+                                        Text("In \(daysRemaining) days")
+                                            .foregroundStyle(Color.green)
+                                            .fontWeight(.bold)
+                                    }
                                 }
                                 .fontDesign(.serif)
                                 .font(.title3)
                                 Button("Mark as Used"){
-                                    
+                                   context.delete(food)
                                 }
-                                .buttonStyle(.borderedProminent)
+                                //.buttonStyle(.borderedProminent)
+                                .padding()
                                 .fontDesign(.serif)
-                                .foregroundColor(.white)
-                                .padding(5)
+                                .fontWeight(.bold)
+                                .foregroundStyle(.green)
+                                .brightness(-0.4)
+                                .background(.green.opacity(0.45))
+                                .cornerRadius(30)
                                 
                             }
                             .padding()
@@ -233,7 +152,7 @@ struct ContentView: View {
                             .font(.title2)
                             .foregroundStyle(.green)
                             .brightness(-0.4)
-                            .background(.green.opacity(0.7))
+                            .background(.green.opacity(0.45))
                             .cornerRadius(30)
                     }
                 }

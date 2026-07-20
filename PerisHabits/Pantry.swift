@@ -20,66 +20,73 @@ struct Pantry: View {
     
     private var foodTypes: Dictionary = ["Leftovers": "Highest", "Dairy":"Medium-High", "Fresh Produce": "Medium", "Meats": "High", "Seafood": "High", "Condiments": "Lower", "Fruit": "Lower"]
     
+    // Originally was going to create an algorithm to rank items in dashboard based on value assigned but decided it would be better to just let the user set a goal for when they want to use the food item by
+    
     var body: some View {
-        //Text("Pantry")
-            //.font(.title)
-            //.padding(10)
-        //HStack{
-            //Button("Undo"){
-                
-            //}
-            //Menu("Sort By"){
-                //Button("Category"){
-                    
-                //}
-                //Button("Use Soon"){
-                    
-                    
-                //}
-            //}
         NavigationStack{
-            HStack{
-                Menu("Sort By"){
-                    Button("Category"){
-                        
-                    }
-                    Button("Use Soon"){
-                        
-                    }
-                }
-            }
+            ZStack(alignment:Alignment(horizontal: .center, vertical: .top)){
+                Color.green.opacity(0.15)
+                    .ignoresSafeArea()
+                Text("Refrigerator")
+                    .font(.title)
+                    .fontWeight(.bold)
+                    .fontDesign(.serif)
+                    .padding(5)
+                    .frame(minWidth:120, maxWidth:.infinity, alignment:.center)
+                    .foregroundStyle(.green)
+                    .brightness(-0.4)
+                    .background(.green.opacity(0.45))
+            
                 List{
                     ForEach(foods) { food in
                         HStack{
                             Text(food.name)
+                                .font(.title3)
+                                .fontDesign(.serif)
                             Spacer()
                             Text(food.useByDate, format:.dateTime.month(.wide).day().year())
+                                .font(.title3)
+                                .fontDesign(.serif)
                         }
+                        
                         .onTapGesture {
                             selectedFood = food
                         }
                     }
                     .onDelete(perform: deleteItem)
+                    
                 }
-                .navigationTitle("Pantry")
-                .navigationBarTitleDisplayMode(.inline)
+                .padding(.vertical, 60)
+                .scrollContentBackground(.hidden)
+                .shadow(radius:15)
+                //.navigationTitle("Pantry")
+                //.navigationBarTitleDisplayMode(.inline)
                 .sheet(item: $selectedFood){ food in
                     NavigationStack {
                         EditFoodView(food: food)
                     }
                     
                 }
-            .safeAreaInset(edge: .bottom){
-                VStack(alignment: .center, spacing: 20){
-                    Text("New Item")
-                        .font(.headline)
+                .safeAreaInset(edge: .bottom){
+                    VStack(alignment: .center, spacing: 20){
+                        Text("New Item")
+                            .font(.headline)
+                            .fontDesign(.serif)
+                            .foregroundStyle(.green)
+                            .brightness(-0.4)
+                            .fontWeight(.bold)
                         VStack{
                             TextField("Name", text: $newFoodItem)
-                            .textFieldStyle(.roundedBorder)
+                                .textFieldStyle(.roundedBorder)
+                                .fontDesign(.serif)
                             //TextField("Type of Food", text: $newLocation)
                             //.textFieldStyle(.roundedBorder)
                             HStack{
                                 Text("Food Type")
+                                    .fontDesign(.serif)
+                                    .foregroundStyle(.green)
+                                    .brightness(-0.4)
+                                    //.fontWeight(.bold)
                                 Picker("Type of Food", selection: $newType){
                                     ForEach(foodTypes.keys.sorted(), id: \.self){ type in
                                         Text("\(type)")
@@ -87,39 +94,55 @@ struct Pantry: View {
                                     }
                                 }
                                 .pickerStyle(.wheel)
-                                .frame(height: 70)
+                                .frame(height: 100)
+                                .fontDesign(.serif)
                             }
                             HStack{
                                 Text("Use By Date")
+                                    .fontDesign(.serif)
+                                    .foregroundStyle(.green)
+                                    .brightness(-0.4)
+                                    //.fontWeight(.bold)
                                 DatePicker(selection: $newUseByDate, in: Date.distantPast...Date.distantFuture, displayedComponents: .date){}
                                     .frame(maxWidth: .infinity, alignment:.center)
+                                    .fontDesign(.serif)
                             }
                             HStack{
                                 Text("Quantity")
+                                    .fontDesign(.serif)
+                                    .foregroundStyle(.green)
+                                    .brightness(-0.4)
                                 Picker("Quantity", selection: $newQuantity){
                                     ForEach(1...100, id: \.self){ quant in
                                         Text("\(quant)")
                                     }
                                 }
                                 .pickerStyle(.wheel)
-                                .frame(height:70)
+                                .frame(height:100)
                             }
                         }
-                
                         
-                    
-                    Button("Save"){
-                        let newFood = FoodItemInfo(name: newFoodItem, useByDate: newUseByDate, quantity: newQuantity, type: newType)
-                        context.insert(newFood)
-                        newFoodItem = ""
-                        newUseByDate = .now
-                        newQuantity = 1
-                        newType = ""
+                        
+                        
+                        Button("Save"){
+                            let newFood = FoodItemInfo(name: newFoodItem, useByDate: newUseByDate, quantity: newQuantity, type: newType)
+                            context.insert(newFood)
+                            newFoodItem = ""
+                            newUseByDate = .now
+                            newQuantity = 1
+                            newType = ""
+                        }
+                        .bold()
+                        .fontDesign(.serif)
+                        .padding()
+                        .foregroundStyle(.green)
+                        .brightness(-0.4)
+                        .background(Color.green.opacity(0.45))
+                        .cornerRadius(20)
                     }
-                    .bold()
+                    .padding()
+                    .background(.bar)
                 }
-                .padding()
-                .background(.bar)
             }
         }
         
